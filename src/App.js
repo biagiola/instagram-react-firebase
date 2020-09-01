@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     width: 400,
     backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
+    border: '1px solid #e6e6e6',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
@@ -95,7 +95,7 @@ function App() {
       </Modal>
 
       <div className="app__header">
-        <div className="app_headerImage">
+        <div className="app__headerImage">
           <img src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png" alt=""
           />
         </div>
@@ -103,7 +103,7 @@ function App() {
 
       <Button onClick={() => setOpen(true)}>Sign Up</Button>
       
-      <h1>HELLO CLever Programmers Let's build an Instagram Clone with React!</h1>
+      <h1>HELLO CLever Programmers Let's build an Instagram Clone with React!🚀️</h1>
 
       {
         posts.map(({id, post}) => (
