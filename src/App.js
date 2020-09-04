@@ -3,6 +3,8 @@ import './App.css'
 import Post from './components/Post'
 import { makeStyles } from '@material-ui/core/styles';
 import { Modal, Button, Input } from '@material-ui/core';
+import ImageUpload from './components/imageUpload';
+import InstagramEmbed from 'react-instagram-embed';
 
 import { db, auth } from './firebase'
 
@@ -37,8 +39,9 @@ function App() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null); // user who is sign in
 
+  /*useEffect runs a piece of code based on a specific condition. The conditions are simply variables. It run one, when page loads, and not again (except if there's a change in the page)*/
   useEffect(() => {
 
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
@@ -59,9 +62,8 @@ function App() {
     }
   }, [user, username])
 
-  /*useEffect runs a piece of code based on a specific condition. The conditions are simply variables. It run one, when page loads, and not again (except if there's a change in the page)*/
   useEffect(() => {
-    db.collection('posts').onSnapshot(snapshot => {
+    db.collection('posts').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
       setPosts(snapshot.docs.map( doc => ({
         id: doc.id,
         post: doc.data()
@@ -96,7 +98,6 @@ function App() {
 
   return (
     <div className="app">
-      
       <Modal
         open={open}
         onClose={() => setOpen(false)}>
@@ -105,7 +106,7 @@ function App() {
           <form className="app__signup">
             <center>
               <img 
-                className="app_headerImage"
+                className="app__headerImage"
                 src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png" 
                 alt=""
               />
@@ -141,7 +142,7 @@ function App() {
           <form className="app__signup">
             <center>
               <img 
-                className="app_headerImage"
+                className="app__headerImage"
                 src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png" 
                 alt=""
               />
@@ -166,26 +167,47 @@ function App() {
 
       <div className="app__header">
         <div className="app__headerImage">
-          <img src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png" alt=""
+          <img src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png" alt=""/>
+          { user ? 
+            <Button onClick={() => auth.signOut()}>Logout</Button>
+            :
+            <div className="app_loginContai">
+              <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
+              <Button onClick={() => setOpen(true)}>Sign Up</Button>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div className="app__posts">
+        <div className="app__postsLeft">
+          {
+            posts.map(({id, post}) => (
+              <Post key={id} postId={id} user={user} username={post.username} caption={post.caption} imageUrl={post.imageUrl} />
+            ))
+          }
+        </div>
+        <div className="app__postsRight">
+          <InstagramEmbed 
+            url='https://www.instagram.com/p/B_uf9dmAGPw/'
+            maxWidth={320}
+            hideCaption={false}
+            containerTagName='div'
+            protocol=''
+            injectScriptonLoading={() => {}}
+            onLoading={() => {}}
+            onSuccess={() => {}}
+            onAfterRender={() => {}}
+            onFailure={() => {}}
           />
         </div>
       </div>
 
-      { user ? 
-        <Button onClick={() => auth.signOut()}>Logout</Button>
+      {/* if user is not define yet, we put a ? do not crash the program */}
+      { user?.displayName ? 
+        <ImageUpload username={user.displayName}/>
         :
-        <div className="app_loginContai">
-          <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
-          <Button onClick={() => setOpen(true)}>Sign Up</Button>
-        </div>
-      }
-      
-      <h1>HELLO CLever Programmers Let's build an Instagram Clone with React!🚀️</h1>
-
-      {
-        posts.map(({id, post}) => (
-          <Post key={id} username={post.username} caption={post.caption} imageUrl={post.imageUrl} />
-        ))
+        <h3>Sorry you need to login to upload</h3>
       }
 
   </div>
