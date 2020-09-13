@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import './App.css'
 import Post from './components/Post'
-import { makeStyles } from '@material-ui/core/styles';
-import { Modal, Button, Input } from '@material-ui/core';
-import ImageUpload from './components/imageUpload';
-import InstagramEmbed from 'react-instagram-embed';
+import { makeStyles } from '@material-ui/core/styles'
+import { Modal, Button, Input } from '@material-ui/core'
+import ImageUpload from './components/imageUpload'
+import InstagramEmbed from 'react-instagram-embed'
 
 import { db, auth } from './firebase'
 
@@ -19,7 +19,7 @@ function getModalStyle() {
   };
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   paper: {
     position: 'absolute',
     width: 400,
@@ -33,12 +33,12 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   const classes = useStyles();
   const [modalStyle] = useState(getModalStyle)
-  const [posts, setPosts] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [openSignIn, setOpenSignIn] = useState(false);
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [posts, setPosts] = useState([])
+  const [open, setOpen] = useState(false)
+  const [openSignIn, setOpenSignIn] = useState(false)
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null); // user who is sign in
 
   /*useEffect runs a piece of code based on a specific condition. The conditions are simply variables. It run one, when page loads, and not again (except if there's a change in the page)*/
@@ -58,7 +58,7 @@ function App() {
 
     return () => {
       // peform some cleanup actions
-      unsubscribe();
+      unsubscribe()
     }
   }, [user, username])
 
@@ -69,7 +69,7 @@ function App() {
         post: doc.data()
       })))
     })
-  }, []);
+  }, [])
 
   const signUp = event => {
     event.preventDefault()
@@ -81,13 +81,13 @@ function App() {
         displayName: username
       })
     }) 
-    .catch((error) => alert(error.message));
+    .catch((error) => alert(error.message))
 
     setOpen(false)
   }
 
   const signIn = event => {
-    event.preventDefault();
+    event.preventDefault()
     
     auth
     .signInWithEmailAndPassword(email, password)
@@ -211,7 +211,7 @@ function App() {
       }
 
   </div>
-  );
+  )
 }
 
-export default App;
+export default App
