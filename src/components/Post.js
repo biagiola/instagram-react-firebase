@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react' //rfce
 import './Post.css'
 import Avatar from '@material-ui/core/Avatar'
-import { db } from '../firebase';
-import firebase from 'firebase';
+import { db } from '../firebase'
+import firebase from 'firebase'
 
 function Post({ postId, user, username, caption, imageUrl }) {
-    const [comments, setComments] = useState([]);
-    const [comment, setComment] = useState('');
+    const [comments, setComments] = useState([])
+    const [comment, setComment] = useState('')
 
     useEffect( () => {
-      let unsubscribe;
+      let unsubscribe
       if(postId) {
         unsubscribe = db
         .collection('posts')
@@ -22,19 +22,19 @@ function Post({ postId, user, username, caption, imageUrl }) {
       }
 
       return () => {
-        unsubscribe();
+        unsubscribe()
       } 
-    }, [postId]);
+    }, [postId])
 
-    const postComment = (event) => {
-      event.preventDefault();
+    const postComment = event => {
+      event.preventDefault()
 
       db.collection('posts').doc(postId).collection('comments').add({
         text: comment,
         username: user.displayName,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       })
-      setComment('');
+      setComment('')
     }
 
     return (
@@ -52,7 +52,7 @@ function Post({ postId, user, username, caption, imageUrl }) {
 
             <div className="post__comments">
               {
-                comments.map((comment) => (
+                comments.map(comment => (
                   <p>
                     <strong>{comment.username}</strong> {comment.text}
                   </p>
